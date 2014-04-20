@@ -40,14 +40,14 @@ describe 'lvm', :type => :class do
       :volume_group => 'myvg',
       :size         => '20G'
     }) }
-    it { should contain_filesystem('/dev/myvg/opt') }
+    it { should contain_filesystem('/dev/mapper/myvg-opt') }
     it { should contain_mount('/opt') }
 
     it { should contain_logical_volume('backup').with({
       :volume_group => 'myvg',
       :size         => '5G'
     }) }
-    it { should contain_filesystem('/dev/myvg/backup') }
+    it { should contain_filesystem('/dev/mapper/myvg-backup') }
     it { should contain_mount('/var/backups') }
   end
 

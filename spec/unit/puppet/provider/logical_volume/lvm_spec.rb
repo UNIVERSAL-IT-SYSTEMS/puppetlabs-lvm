@@ -172,10 +172,10 @@ describe provider_class do
           @resource.expects(:[]).with(:minor).returns(nil).at_least_once
           @provider.expects(:lvcreate).with('-n', 'mylv', '--size', '1g', 'myvg')
           @provider.create
-          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/myvg/mylv').returns(' 1.00g').at_least_once
-          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/myvg/mylv').returns(' 1000.00k')
-          @provider.expects(:lvextend).with('-L', '2000000k', '/dev/myvg/mylv').returns(true)
-          @provider.expects(:blkid).with('/dev/myvg/mylv')
+          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/mapper/myvg-mylv').returns(' 1.00g').at_least_once
+          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/mapper/myvg-mylv').returns(' 1000.00k')
+          @provider.expects(:lvextend).with('-L', '2000000k', '/dev/mapper/myvg-mylv').returns(true)
+          @provider.expects(:blkid).with('/dev/mapper/myvg-mylv')
           @provider.size = '2000000k'
         end
       end
@@ -194,8 +194,8 @@ describe provider_class do
           @resource.expects(:[]).with(:minor).returns(nil).at_least_once
           @provider.expects(:lvcreate).with('-n', 'mylv', '--size', '1g', 'myvg')
           @provider.create
-          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/myvg/mylv').returns(' 1.00g').at_least_once
-          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/myvg/mylv').returns(' 1000.00k')
+          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/mapper/myvg-mylv').returns(' 1.00g').at_least_once
+          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/mapper/myvg-mylv').returns(' 1000.00k')
           proc { @provider.size = '1.15g' }.should raise_error(Puppet::Error, /extent/)
         end
       end
@@ -217,8 +217,8 @@ describe provider_class do
           @resource.expects(:[]).with(:minor).returns(nil).at_least_once
           @provider.expects(:lvcreate).with('-n', 'mylv', '--size', '1g', 'myvg')
           @provider.create
-          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/myvg/mylv').returns(' 1.00g').at_least_once
-          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/myvg/mylv').returns(' 1000.00k')
+          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/mapper/myvg-mylv').returns(' 1.00g').at_least_once
+          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/mapper/myvg-mylv').returns(' 1000.00k')
           proc { @provider.size = '1m' }.should raise_error(Puppet::Error, /manual/)
         end
       end
@@ -240,8 +240,8 @@ describe provider_class do
           @resource.expects(:[]).with(:minor).returns(nil).at_least_once
           @provider.expects(:lvcreate).with('-n', 'mylv', '--size', '1g', 'myvg')
           @provider.create
-          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/myvg/mylv').returns(' 1.00g').at_least_once
-          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/myvg/mylv').returns(' 1000.00k')
+          @provider.expects(:lvs).with('--noheading', '--unit', 'g', '/dev/mapper/myvg-mylv').returns(' 1.00g').at_least_once
+          @provider.expects(:lvs).with('--noheading', '-o', 'vg_extent_size', '--units', 'k', '/dev/mapper/myvg-mylv').returns(' 1000.00k')
           proc { @provider.size = '1m' }.should output(/already/).to_stdout
         end
       end
@@ -253,14 +253,14 @@ describe provider_class do
       @resource.expects(:[]).with(:volume_group).returns('myvg').twice
       @resource.expects(:[]).with(:name).returns('mylv').twice
       @provider.expects(:dmsetup).with('remove', 'myvg-mylv')
-      @provider.expects(:lvremove).with('-f', '/dev/myvg/mylv')
+      @provider.expects(:lvremove).with('-f', '/dev/mapper/myvg-mylv')
       @provider.destroy
     end
     it "should execute 'dmsetup' and 'lvremove' and properly escape names with dashes" do
       @resource.expects(:[]).with(:volume_group).returns('my-vg').twice
       @resource.expects(:[]).with(:name).returns('my-lv').twice
       @provider.expects(:dmsetup).with('remove', 'my--vg-my--lv')
-      @provider.expects(:lvremove).with('-f', '/dev/my-vg/my-lv')
+      @provider.expects(:lvremove).with('-f', '/dev/mapper/my-vg/my-lv')
       @provider.destroy
     end
   end

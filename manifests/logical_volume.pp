@@ -27,7 +27,7 @@ define lvm::logical_volume (
     fail("lvm::logical_volume \$name can't be undefined")
   }
 
-  $lvm_device_path = "/dev/${volume_group}/${name}"
+  $lvm_device_path = "/dev/mapper/${volume_group}-${name}"
 
   if $mountpath_require and $fs_type != 'swap' {
     Mount {

@@ -4,7 +4,7 @@ describe Puppet::Type.type(:filesystem) do
   before do
     @type = Puppet::Type.type(:filesystem)
     @valid_params = {
-      :name => '/dev/myvg/mylv',
+      :name => '/dev/mapper/myvg-mylv',
       :ensure => 'present'
     }
     stub_default_provider!
