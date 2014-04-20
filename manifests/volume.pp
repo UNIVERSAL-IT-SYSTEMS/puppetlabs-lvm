@@ -123,7 +123,7 @@ define lvm::volume (
       }
 
       if $fstype != undef {
-        filesystem { "/dev/${vg}/${name}":
+        filesystem { "/dev/mapper/${vg}-${name}":
           ensure  => present,
           fs_type => $fstype,
           require => Logical_volume[$name]

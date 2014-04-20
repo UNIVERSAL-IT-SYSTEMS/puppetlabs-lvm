@@ -22,11 +22,11 @@ define lvm::logical_volume(
 
   if $ensure == 'present' {
     Logical_volume[$name] ->
-    Filesystem["/dev/${volume_group}/${name}"] ->
+    Filesystem["/dev/mapper/${volume_group}-${name}"] ->
     Mount[$mountpath]
   } else {
     Mount[$mountpath] ->
-    Filesystem["/dev/${volume_group}/${name}"] ->
+    Filesystem["/dev/mapper/${volume_group}-${name}"] ->
     Logical_volume[$name]
   }
 
@@ -36,7 +36,7 @@ define lvm::logical_volume(
     size         => $size,
   }
 
-  filesystem {"/dev/${volume_group}/${name}":
+  filesystem {"/dev/mapper/${volume_group}-${name}":
     ensure  => $ensure,
     fs_type => $fs_type,
   }
@@ -47,7 +47,7 @@ define lvm::logical_volume(
   } ->
   mount {$mountpath:
     ensure  => $mount_ensure,
-    device  => "/dev/${volume_group}/${name}",
+    device  => "/dev/mapper/${volume_group}-${name}",
     fstype  => $fs_type,
     options => $options,
     pass    => 2,

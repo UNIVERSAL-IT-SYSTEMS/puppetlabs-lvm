@@ -57,7 +57,7 @@ logical_volume { 'mylv':
   size         => '20G',
 }
 
-filesystem { '/dev/myvg/mylv':
+filesystem { '/dev/mapper/myvg-mylv':
   ensure  => present,
   fs_type => 'ext3',
   options => '-b 4096 -E stride=32,stripe-width=64',

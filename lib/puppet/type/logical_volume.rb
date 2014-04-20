@@ -3,7 +3,7 @@ Puppet::Type.newtype(:logical_volume) do
 
     newparam(:name) do
         desc "The name of the logical volume.  This is the unqualified name and will be
-            automatically added to the volume group's device path (e.g., '/dev/$vg/$lv')."
+            automatically added to the volume group's device path (e.g., '/dev/mapper/$vg-$lv')."
         isnamevar
         validate do |value|
             if value.include?(File::SEPARATOR)

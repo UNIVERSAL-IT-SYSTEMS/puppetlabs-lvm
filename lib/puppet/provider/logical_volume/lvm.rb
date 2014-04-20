@@ -129,7 +129,7 @@ Puppet::Type.type(:logical_volume).provide :lvm do
     end
 
     def path
-        "/dev/#{@resource[:volume_group]}/#{@resource[:name]}"
+        "/dev/mapper/#{@resource[:volume_group]}-#{@resource[:name]}"
     end
 
 end
